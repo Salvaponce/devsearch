@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+</head>
+<body>    
+    {% extends 'main.html' %}
+
+    {% block content %}
+    <h1 style="color: red;">Projects</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <th><a href="{% url 'single-project' project.id%}">{{project.title}}</a></th>
+                <th>{{project.description}}</th>
+                <th><a href="{% url 'update-project' project.id%}">Edit</a></th>
+                <th><a href="{% url 'delete-project' project.id%}">Delete</a></th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock content %}
+    
+</body>
+</html>
