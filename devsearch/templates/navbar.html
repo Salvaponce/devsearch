@@ -1,4 +1,9 @@
-<h1>Logo</h1>
+{% load static %}
+
+<img style="  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 125px;"  src="{% static 'images/logo_sample.jpg' %}" alt="">
 
 <a href="/">Home</a>
 <a href="{% url 'create-project' %}">Add project</a>
