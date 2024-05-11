@@ -20,7 +20,7 @@ def project(request, pk):
 
 def createProject(request):
     if request.method == 'POST':  # Check if it's a POST request
-        form = ProjectForm(request.POST)  # Pass POST data to the form instance
+        form = ProjectForm(request.POST, request.FILES)  # Pass POST data to the form instance
         if form.is_valid():
             # Process valid form data
             form.save()  # Or perform other actions with the cleaned data
@@ -36,7 +36,7 @@ def updateProject(request, pk):
     form = ProjectForm(instance=projectObj)
 
     if request.method == 'POST':
-        form = ProjectForm(request.POST, instance=projectObj)
+        form = ProjectForm(request.POST, request.FILES, instance=projectObj)
         if form.is_valid():
             form.save()
             return redirect('/')

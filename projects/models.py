@@ -7,7 +7,7 @@ class Project(models.Model): #We inherance from models. Meaning we create a offi
     #owner =
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True) #null is for the db. blanck is for django.
-    #featured_image =
+    featured_image = models.ImageField(null=True, blank=True, default = 'file-notfound.jpg')
     demo_link = models.CharField(max_length=1200, null=True, blank=True)
     source_link = models.CharField(max_length=1200, null=True, blank=True)
     tags = models.ManyToManyField('Tag', blank=True) #Is a string because the model Tag is below this model
