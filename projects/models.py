@@ -1,10 +1,11 @@
 from django.db import models
 import uuid
+from users.models import Profile
 
 # Create your models here. Data base
 
 class Project(models.Model): #We inherance from models. Meaning we create a officiallly a django model
-    #owner =
+    owner = models.ForeignKey(Profile, on_delete= models.SET_NULL, null=True, blank = True)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True) #null is for the db. blanck is for django.
     featured_image = models.ImageField(null=True, blank=True, default = 'file-notfound.jpg')
