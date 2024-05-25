@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .forms import CustomCreationForm
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -25,6 +26,8 @@ def userProfile(request, pk):
 
 def loginUser(request):
 
+    page = 'login'
+
     if request.user.is_authenticated:
         return redirect('profiles')
     
@@ -44,8 +47,30 @@ def loginUser(request):
             return redirect('profiles')
         else:
             messages.error(request,'Username or password is incorrect')
+    context = {'page': page}
+    return render(request, 'users/login_register.html', context)
 
-    return render(request, 'users/login_register.html')
+
+def registerUser(request):
+    form = CustomCreationForm()
+    page = 'register'
+
+    if request.method == 'POST':
+        form = CustomCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False) #We are saving out user bur holding a temperary instance of this user
+            user.username = user.username.lower() #Now we know that every user is not the same but capitalize
+            user.save()
+
+            messages.success(request, "User account was crated")
+            login(request, user)
+            return redirect('profiles')
+        else:
+            messages.error(request, 'An error has occured during registration')
+        
+
+    context = {'page': page, 'form': form}
+    return render(request, 'login.html', context)
 
 
 def logoutUser(request):
