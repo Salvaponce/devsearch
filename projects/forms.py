@@ -15,6 +15,6 @@ class ProjectForm(ModelForm):
             super(ProjectForm, self).__init__(*args, **kwargs)
 
             for name, field in self.fields.items():
-                field.widget.attrs.update({'class':'input input--text'}) #To cahnge the class to be seen better
+                field.widget.attrs.update({'class':'input'}) #To cahnge the class to be seen better
 
             # self.fields['title'].widget.attrs.update({'class':'input input--text'})

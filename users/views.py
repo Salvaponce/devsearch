@@ -39,6 +39,7 @@ def loginUser(request):
             user = User.objects.get(username = username)
         except:
             messages.error(request, "User doesn not exist.") #Something to fix
+            return redirect('login')
 
         user = authenticate(request, username = username, password = password)
 
@@ -47,6 +48,7 @@ def loginUser(request):
             return redirect('profiles')
         else:
             messages.error(request,'Username or password is incorrect')
+            
     context = {'page': page}
     return render(request, 'users/login_register.html', context)
 
@@ -70,7 +72,7 @@ def registerUser(request):
         
 
     context = {'page': page, 'form': form}
-    return render(request, 'login.html', context)
+    return render(request, 'users/login_register.html', context)
 
 
 def logoutUser(request):
