@@ -14,6 +14,16 @@ def createProfile(sender, instance, created, **kwargs):
             name = user.first_name,
         )
 
+def updateuser(sender, instance, created, **kwargs):
+    profile = instance
+    user = profile.user
+    if created == False: 
+        user.first_name = profile.name
+        user.username = profile.username
+        user.email = profile.email
+        user.save()
+
+
 
 #@receiver(post_delete, sender=Profile)
 def userDelete(sender, instance, **kwargs):
@@ -21,4 +31,5 @@ def userDelete(sender, instance, **kwargs):
     user.delete()
 
 post_save.connect(createProfile, sender=User)
+post_delete.connect(updateuser, sender=Profile) #sender means that the signal comes from profile
 post_delete.connect(userDelete, sender=Profile)

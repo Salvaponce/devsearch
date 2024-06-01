@@ -23,11 +23,14 @@ def project(request, pk):
 
 @login_required(login_url='login')
 def createProject(request):
+    profile = request.user.profile
     if request.method == 'POST':  # Check if it's a POST request
         form = ProjectForm(request.POST, request.FILES)  # Pass POST data to the form instance
         if form.is_valid():
             # Process valid form data
-            form.save()  # Or perform other actions with the cleaned data
+            project = form.save(commit=False)  # Or perform other actions with the cleaned data
+            project.owner = profile
+            project.save()
             # Redirect to success page or show confirmation message
             return redirect('/')  # Replace with your success URL pattern name
     else:
@@ -38,7 +41,8 @@ def createProject(request):
 
 @login_required(login_url='login')
 def updateProject(request, pk):
-    projectObj = Project.objects.get(id = pk)
+    profile = request.user.profile
+    projectObj = Project.project_set.get(id = pk)
     form = ProjectForm(instance=projectObj)
 
     if request.method == 'POST':
@@ -52,7 +56,8 @@ def updateProject(request, pk):
 
 @login_required(login_url='login')
 def deleteProject(request, pk):
-    project = Project.objects.get(id = pk)
+    profile = request.user.profile
+    project = Project.project_set.get(id = pk)
 
     if request.method == 'POST':
         project.delete()
