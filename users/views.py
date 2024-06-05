@@ -10,7 +10,8 @@ from django.contrib import messages
 
 def profiles(request):
     profiles = Profile.objects.all()
-    return render(request, 'users/profiles.html', {'profiles': profiles})
+    context = {'profiles': profiles}
+    return render(request, 'users/profiles.html', context)
 
 
 def userProfile(request, pk):
@@ -145,3 +146,17 @@ def update_skill(request, pk):
 
     context = {'form' : form }
     return render(request, 'users/skill_form.html')
+
+
+@login_required(login_url = 'login')
+def delete_skill(request, pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id = pk)
+    context = {'object': skill}
+
+    if request.method == 'POST':
+        skill.delete()
+        messages.success(request, "Skill was deleted so quickly!")
+        return redirect('account')
+
+    return render(request, 'delete.html', context)

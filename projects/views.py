@@ -32,7 +32,7 @@ def createProject(request):
             project.owner = profile
             project.save()
             # Redirect to success page or show confirmation message
-            return redirect('/')  # Replace with your success URL pattern name
+            return redirect('account')  # Replace with your success URL pattern name
     else:
         form = ProjectForm() #Like this we build an instance of ProjectForm
     context = {'form': form}
@@ -49,7 +49,7 @@ def updateProject(request, pk):
         form = ProjectForm(request.POST, request.FILES, instance=projectObj)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('account')
     context = {'form': form}
     return render(request, 'projects/project-form.html', context)
 
@@ -64,4 +64,4 @@ def deleteProject(request, pk):
 
         return redirect('/')
 
-    return render(request, 'projects/delete.html', {'object':project})
+    return render(request, 'delete.html', {'object':project})
