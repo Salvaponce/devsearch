@@ -1,16 +1,20 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import Project
+from .models import Project, Tag
 from .forms import ProjectForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from .utils import searchProject
 
 # Create your views here. Logic of our app
 #Can respond with an html or json or whatever you want
 
 
 def projects(request):
-    projects = Project.objects.all()
-    return render(request, 'projects/projects.html', {"projects": projects})
+
+    projects, search_query = searchProject(request)
+    context = {"projects": projects, 'search_query' : search_query}
+    return render(request, 'projects/projects.html', )
 
 
 def project(request, pk):
