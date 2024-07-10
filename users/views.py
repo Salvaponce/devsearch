@@ -6,12 +6,13 @@ from .forms import CustomCreationForm, ProfileForm, SkillForm
 from django.db.models import Q
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .utils import searchDev
+from .utils import searchDev, paginateDev
 
 
 def profiles(request):
     profiles, search_query =searchDev(request)
-    context = {'profiles': profiles, 'search_query': search_query}
+    profiles, custom_range = paginateDev(request, profiles, 3)
+    context = {'profiles': profiles, 'search_query': search_query, 'custom_range' : custom_range}
     return render(request, 'users/profiles.html', context)
 
 

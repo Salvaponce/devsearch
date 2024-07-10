@@ -4,7 +4,8 @@ from .models import Project, Tag
 from .forms import ProjectForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .utils import searchProject
+from .utils import searchProject, paginateProject
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here. Logic of our app
 #Can respond with an html or json or whatever you want
@@ -13,8 +14,10 @@ from .utils import searchProject
 def projects(request):
 
     projects, search_query = searchProject(request)
-    context = {"projects": projects, 'search_query' : search_query}
-    return render(request, 'projects/projects.html', )
+    projects, custom_range = paginateProject(request, projects, 3)    
+
+    context = {"projects": projects, 'search_query' : search_query, 'custom_range': custom_range}
+    return render(request, 'projects/projects.html', context)
 
 
 def project(request, pk):

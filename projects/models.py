@@ -20,6 +20,9 @@ class Project(models.Model): #We inherance from models. Meaning we create a offi
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-created']
+
 
 class Review(models.Model):
 
