@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .models import Project, Tag
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages
 from .utils import searchProject, paginateProject
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -24,7 +25,23 @@ def project(request, pk):
     projectObj = Project.objects.get(id = pk)
     tags = projectObj.tags.all()
     reviews = projectObj.review_set.all() #Go to this project and give all the children, give the entire set
-    context = {"project": projectObj, "tags": tags, "reviews": reviews}
+    form = ReviewForm()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = projectObj
+        review.owner = request.user.profile
+        review.save()
+
+        projectObj.getVoteCount # There is no parenthesis because property tag
+
+        messages.success(request, "Your review submitted")
+        return redirect("single-project", pk = projectObj.id)
+    
+
+
+    context = {"project": projectObj, "tags": tags, "reviews": reviews, "form":form}
     return render(request, 'projects/single-project.html', context)
 
 

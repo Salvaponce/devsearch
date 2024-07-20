@@ -23,6 +23,18 @@ class Project(models.Model): #We inherance from models. Meaning we create a offi
     class Meta:
         ordering = ['-created']
 
+    @property
+    def getVoteCount(self):
+        reviews = self.review_set.all()
+        upVote = reviews.filter(value='up').count()
+        totalVotes = reviews.count()
+
+        ratio = (upVote / totalVotes) * 100
+
+        self.vote_total = totalVotes
+        self.vote_ratio = ratio
+        self.save()
+
 
 class Review(models.Model):
 
